@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 app.use(cors({
-    origin: "https://lambent-daifuku-4d6c44.netlify.app",
+    origin: "https://flavorfind1.netlify.app",
     credentials: true
 }));
 
