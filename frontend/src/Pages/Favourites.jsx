@@ -118,7 +118,8 @@ export default function Favourites() {
             {meals.map((item, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-r from-blue-200 to-white shadow-lg rounded-2xl overflow-hidden"
+                className="shadow-lg rounded-2xl overflow-hidden"
+                style={{ background: "linear-gradient(to right, #bfdbfe, white)" }}
               >
                 <img
                   src={item.image}
@@ -181,13 +182,17 @@ export default function Favourites() {
               <button
                 onClick={() => setModal(false)}
                 className="px-4 py-1 bg-gray-200 rounded hover:scale-105 transition"
+                style={{ backgroundColor: "#93C5FD" }}
+
               >
                 Cancel
               </button>
 
               <button
                 onClick={handleProceed}
-                className="px-4 py-1 bg-blue-300 rounded hover:scale-105 transition"
+                className="px-4 py-1  rounded hover:scale-105 transition"
+                style={{ backgroundColor: "#93C5FD" }}
+
               >
                 Proceed
               </button>

@@ -334,30 +334,108 @@ export default function Planning() {
       </div>
 
       {modal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-3xl rounded-2xl p-6 shadow-xl">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">
-                {details.recipe?.label}
-              </h2>
-              <X onClick={() => setModal(false)} className="cursor-pointer" />
-            </div>
+  <div
+    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    className={`fixed inset-0 z-50 flex items-end md:items-center md:justify-center transition-all duration-500 ${
+      modal
+        ? "opacity-100 pointer-events-auto"
+        : "opacity-0 pointer-events-none"
+    }`}
+  >
+    <div
+      className={`bg-white w-full md:w-[700px] max-h-[90vh] overflow-auto rounded-t-3xl md:rounded-2xl shadow-xl transform transition-transform duration-500 ${
+        modal ? "scale-100" : "scale-0"
+      }`}
+    >
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-8 pt-8">
+        <p className="font-bold font-mono text-2xl">
+          Meal Details:
+        </p>
+        <X
+          color="black"
+          size={25}
+          onClick={() => setModal(false)}
+          className="cursor-pointer"
+        />
+      </div>
 
-            <img
-              src={details.recipe?.image}
-              className="w-full md:w-72 rounded-xl"
-            />
+      {/* CONTENT */}
+      <div className="flex md:flex-row flex-col items-center justify-between px-8 gap-10 py-8">
+        {/* IMAGE */}
+        <img
+          src={details.recipe?.image}
+          alt="meal"
+          className="md:h-72 md:w-72 h-40 w-40 rounded-2xl"
+        />
 
-            <button
+        {/* DETAILS */}
+        <div className="font-mono text-lg w-full">
+          <div>
+            <span className="font-bold">Name: </span>
+            <span>{details.recipe?.label}</span>
+          </div>
+
+          {/* DIETS */}
+          <div className="flex flex-wrap items-center mt-5">
+            <span className="font-bold mr-3">Diets:</span>
+            {details.recipe?.dietLabels?.map((item, index) => (
+              <p
+                key={index}
+                style={{ backgroundColor: "#BFDBFE" }}
+                className="py-1 px-3 mr-3 my-2 rounded-2xl text-sm"
+              >
+                {item}
+              </p>
+            ))}
+          </div>
+
+          {/* MEAL TYPE */}
+          <div className="mt-5">
+            <span className="font-bold">Meal Type: </span>
+            <span
+              style={{ backgroundColor: "#BFDBFE" }}
+              className="px-5 py-2 rounded-2xl text-sm"
+            >
+              {details.recipe?.mealType}
+            </span>
+          </div>
+
+          {/* HEALTH LABELS */}
+          <div className="flex flex-wrap my-5">
+            <span className="font-bold mr-3">Health Labels:</span>
+            {details.recipe?.healthLabels
+              ?.slice(0, 10)
+              .map((item, index) => (
+                <p
+                  key={index}
+                  style={{ backgroundColor: "#BFDBFE" }}
+                  className="py-1 px-3 mr-3 my-2 rounded-2xl text-sm"
+                >
+                  {item}
+                </p>
+              ))}
+          </div>
+
+          {/* ADD TO FAVOURITES BUTTON */}
+          <div className="mt-6">
+            <p
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, #bfdbfe, white)",
+              }}
+              className="w-60 text-center rounded px-7 py-2 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-500 shadow-md"
               onClick={() => handleFavourites(details)}
-              className="mt-6 bg-blue-200 px-6 py-2 rounded-lg hover:scale-105 transition"
-              style={{ backgroundColor: "#bfdbfe" }}
             >
               Add to Favourites
-            </button>
+            </p>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
 
       {msg && (
         <div className="fixed bottom-6 right-6 bg-white shadow-lg rounded-2xl px-6 py-4 flex items-center gap-4">
