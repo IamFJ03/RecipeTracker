@@ -126,7 +126,7 @@ export default function Navbar({ foods }) {
         <div
           style={{ backgroundColor: "#DBEAFE" }}
           className={`
-      absolute top-30 right-5 
+      absolute top-15 right-5 
       h-110 w-70 shadow-md rounded-xl
       flex flex-col justify-between
 
@@ -134,13 +134,12 @@ export default function Navbar({ foods }) {
       ${isLoggedIn && userModal ? "scale-100 opacity-100 pointer-events-auto" : "scale-0 opacity-0 pointer-events-none"}
     `}
         >
-          {/* Top user info */}
+          
           <div className="relative pl-22 mt-5 border-b border-gray-400">
             <img src={user} className="w-15 h-15 rounded-full" />
             <p className="ml-2 font-mono font-semibold my-2">{username}</p>
           </div>
 
-          {/* Middle section */}
           <div className="px-5 flex flex-col gap-10">
             <p className="font-mono">{email}</p>
 
@@ -151,7 +150,7 @@ export default function Navbar({ foods }) {
             <Link to={"/payment"} className="flex items-center gap-5">
               <Gem size={25} color="black" />
               <p
-                style={{ backgroundColor: "#3B82F6" }}
+                style={{ backgroundColor: "#60A5FA" }}
                 className="font-mono px-5 py-1 rounded-xl w-[65%] cursor-pointer
           hover:scale-110 transition-all duration-500 text-white"
               >

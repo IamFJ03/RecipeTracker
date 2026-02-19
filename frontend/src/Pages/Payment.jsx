@@ -143,7 +143,7 @@ export default function Payment() {
 
           <button
             onClick={() => setModal(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg transition active:scale-95"
+            className=" hover:bg-blue-400 text-white px-5 py-2 rounded-lg transition active:scale-95"
             style={{ backgroundColor: "#bfdbfe" }}
           >
             Show Info
@@ -179,7 +179,7 @@ export default function Payment() {
               disabled={isLoading}
               onClick={() => handlePayment(plan.price)}
               style={{ backgroundColor: "#bfdbfe" }}
-              className="mt-6 w-full bg-blue-200 hover:bg-blue-600 text-white py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+              className="mt-6 w-full  hover:bg-blue-400 text-white py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
             >
               {isLoading ? "Processing..." : plan.btn}
             </button>
