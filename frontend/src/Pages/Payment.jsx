@@ -14,7 +14,6 @@ export default function Payment() {
 
   const navigate = useNavigate();
 
-  // Load Razorpay Script Safely
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -145,13 +144,13 @@ export default function Payment() {
           <button
             onClick={() => setModal(true)}
             className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg transition active:scale-95"
+            style={{ backgroundColor: "#bfdbfe" }}
           >
             Show Info
           </button>
         </div>
       </div>
 
-      {/* PLANS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 pb-16 grid grid-cols-1 md:grid-cols-3 gap-8">
         {plans.map((plan, i) => (
           <div
@@ -179,7 +178,8 @@ export default function Payment() {
             <button
               disabled={isLoading}
               onClick={() => handlePayment(plan.price)}
-              className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+              style={{ backgroundColor: "#bfdbfe" }}
+              className="mt-6 w-full bg-blue-200 hover:bg-blue-600 text-white py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
             >
               {isLoading ? "Processing..." : plan.btn}
             </button>
@@ -187,14 +187,12 @@ export default function Payment() {
         ))}
       </div>
 
-      {/* STATUS */}
       {status && (
         <p className="text-center pb-10 font-mono text-green-600">
           {status}
         </p>
       )}
 
-      {/* MODAL */}
       <div
         className={`fixed inset-0 z-50 bg-black/50 flex items-center justify-center transition duration-300 ${
           modal ? "opacity-100" : "opacity-0 pointer-events-none"

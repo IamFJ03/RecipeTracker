@@ -243,7 +243,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* TOAST */}
       <div
         className={`fixed bottom-5 right-1/2 translate-x-1/2 md:right-10 md:translate-x-0 bg-white w-[90%] md:w-96 h-20 rounded-2xl shadow flex items-center transition-all duration-300 ${msg ? 'opacity-100' : 'opacity-0'
           }`}

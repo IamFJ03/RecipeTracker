@@ -36,14 +36,12 @@ export default function Recipe() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 py-10">
 
-        {/* Title */}
         <h1 className="text-3xl sm:text-4xl font-bold font-mono text-center lg:text-left mb-10">
           {meal.label}
         </h1>
 
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-20">
 
-          {/* Image Section */}
           <div className="w-full lg:w-1/2 flex justify-center">
             <img
               src={meal.image}
@@ -52,7 +50,6 @@ export default function Recipe() {
             />
           </div>
 
-          {/* Ingredients Section */}
           <div className="w-full lg:w-1/2">
             <p className="text-2xl font-semibold font-mono mb-6">
               Meal Recipe Includes:
@@ -69,12 +66,11 @@ export default function Recipe() {
                       "linear-gradient(to right, #bfdbfe, #ffffff)",
                   }}
                 >
-                  {/* Ingredient Name */}
+                  
                   <p className="font-semibold text-base sm:text-lg">
                     {i.text}
                   </p>
 
-                  {/* Expandable Section */}
                   <div
                     className={`
                       overflow-hidden transition-all duration-500 ease-in-out
@@ -87,7 +83,6 @@ export default function Recipe() {
                   >
                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
 
-                      {/* Ingredient Image */}
                       {i.image && (
                         <img
                           src={i.image}
@@ -96,7 +91,6 @@ export default function Recipe() {
                         />
                       )}
 
-                      {/* Ingredient Details */}
                       <div className="font-mono text-sm sm:text-base text-center sm:text-left">
                         <div>
                           <span className="font-bold">Food: </span>
