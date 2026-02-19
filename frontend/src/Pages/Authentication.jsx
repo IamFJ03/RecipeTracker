@@ -1,174 +1,198 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User, Mail, Eye, EyeClosed } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 
 export default function Authentication() {
-  const [login, setLogin] = useState(false)
-  const [email, setEmail] = useState("")
+
+  const [login, setLogin] = useState(false);
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [cnfPassword, setCnfPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [passErrMsg, setPassErrMsg] = useState("");
   const [showPass, setShowPass] = useState(false);
-  const { setIsLoggedIn, setUserInfo, loggedIn } = useAuth();
 
+  const { loggedIn } = useAuth();
   const navigate = useNavigate();
 
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(value);
+  };
+
   const handleSignUp = async () => {
-    if (username.length > 1 || email.length > 10 || password.length > 8) {
-      setErrMsg("All Fields are required or password length should be more then 8 characters");
-    }
-    if (password !== cnfPassword) {
-      setPassErrMsg("Password must match!!");
-      setPassword("");
-      setCnfPassword("");
+
+    if (!username || !email || password.length < 8) {
+      setErrMsg("All fields required. Password must be at least 8 characters.");
       return;
     }
 
-    const formdata = new FormData();
-    formdata.append("username", username);
-    formdata.append("email", email);
-    formdata.append("password", password);
+    if (!validateEmail(email)) {
+      setErrMsg("Invalid email address");
+      return;
+    }
+
+    if (password !== cnfPassword) {
+      setPassErrMsg("Passwords must match!");
+      return;
+    }
 
     try {
-      console.log(formdata)
       const response = await axios.post(
         "https://recipetracker-fg4e.onrender.com/api/authentication/signup",
-        formdata,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        { username, email, password }
       );
 
       if (response.data.message === "User Created Succesfully") {
-        console.log("User Created Succesfully");
+        setLogin(true);
         setUsername("");
         setEmail("");
         setPassword("");
-        setLogin(true);
+        setCnfPassword("");
       }
 
     } catch (e) {
-      console.log("Error while Signing Up", e);
+      console.log(e);
     }
-
   };
 
-  const validateEmail = (value) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return regex.test(value);
-  }
-
   const handleLogin = async () => {
-    if (username.length < 1 || email.length < 10 || password.length < 8) {
-      setErrMsg("All Fields are required or password length should be more then 8 characters");
-      return
+
+    if (!username || !email || password.length < 8) {
+      setErrMsg("All fields required. Password must be at least 8 characters.");
+      return;
     }
-  
-   if (validateEmail(email)) {
-    setErrMsg("");
-      
-    } else {
-      setErrMsg("Invalid email address")
-      return
+
+    if (!validateEmail(email)) {
+      setErrMsg("Invalid email address");
+      return;
     }
 
     try {
-      const res = await axios.post("https://recipetracker-fg4e.onrender.com/api/authentication/login", {
-        username, email, password
-      },
-        {
-          withCredentials: true
-        });
+      const res = await axios.post(
+        "https://recipetracker-fg4e.onrender.com/api/authentication/login",
+        { username, email, password },
+        { withCredentials: true }
+      );
+
       if (res.data.message === "Authentication Succesfull") {
-
-        console.log("User Found", res.data.USER);
-
-        loggedIn(res.data.USER)
-        setUsername("");
-        setEmail("");
-        setPassword("");
+        loggedIn(res.data.USER);
         navigate('/');
-
       }
-      else
-        console.log("User Not Found");
+
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {
-      console.log("Error During Authentication", e);
-    }
-  }
+  };
+
   useEffect(() => {
-  if (errMsg || passErrMsg) {
-    const timer = setTimeout(() => {
-      setErrMsg("");
-      setPassErrMsg("");
-    }, 5000);
+    if (errMsg || passErrMsg) {
+      const timer = setTimeout(() => {
+        setErrMsg("");
+        setPassErrMsg("");
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [errMsg, passErrMsg]);
 
-    return () => clearTimeout(timer);
-  }
-}, [errMsg, passErrMsg]);
   return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 
-    <div className=''>
-      {
-        login ?
-          <div className='bg-white shadow-2xl md:h-fit md:py-5 h-125 md:w-120 w-90 ml-[7%] md:ml-140 mt-30 rounded-2xl'>
-            <p className='text-3xl  px-15 pt-5 text-center font-extrabold'>Continue your Culinary Journey</p>
-            <p className='text-gray-500 px-15 mt-3 text-[15px]'>A world of Flavor and personalized meal plans</p>
-            <div className='relative md:left-20 left-10'>
-              <div className=' my-5 flex items-center'>
-                <input type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Enter UserName' className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 py-1.75 pl-3 pr-10 rounded' />
-                <User color='gray' size={20} className='absolute md:right-42 right-25' />
-              </div>
-              <div className='flex items-center'>
-                <input type='email' placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)} className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 py-1.75 px-3 rounded' required /><br />
-                <Mail color='gray' size={20} className='absolute md:right-42 right-25' />
-              </div>
-              {errMsg.length > 0 && <p className='text-red-500 relative'>{errMsg}</p>}
-              <div className='flex items-center'>
-                <input type={showPass ? 'text' : 'password'} placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 my-5 py-1.75 px-3 rounded' required /><br />
-                <Eye color='gray' size={20} className='absolute md:right-42 right-25' onClick={() => setShowPass(!showPass)} />
-              </div>
-              {passErrMsg.length > 0 && <p className='text-red-500 bottom-5 relative'>{passErrMsg}</p>}
-              <button style={{ backgroundColor: '#93C5FD' }} onClick={() => handleLogin()} className='mb-5 md:px-33 px-30 rounded-2xl py-2 cursor-pointer hover:shadow-xl transition-all duration-500 hover:scale-105'>Log In</button>
-              <p className='md:ml-10 ml-5'>Don't Have An Account? <button className='cursor-pointer' onClick={() => setLogin(false)}>Sign Up</button></p>
-            </div>
+      <div className="bg-white shadow-xl w-full max-w-md rounded-2xl p-8">
+
+        <h2 className="text-2xl font-bold text-center mb-2">
+          {login ? "Welcome Back " : "Create Account"}
+        </h2>
+
+        <p className="text-gray-500 text-center mb-6 text-sm">
+          {login
+            ? "Continue your culinary journey"
+            : "Join the culinary journey"}
+        </p>
+
+        <div className="relative mb-4">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-400"
+          />
+          <User className="absolute right-3 top-2.5 text-gray-400" size={18} />
+        </div>
+
+        <div className="relative mb-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-400"
+          />
+          <Mail className="absolute right-3 top-2.5 text-gray-400" size={18} />
+        </div>
+
+        {errMsg && <p className="text-red-500 text-sm mb-3">{errMsg}</p>}
+
+        <div className="relative mb-4">
+          <input
+            type={showPass ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-400"
+          />
+          {showPass ? (
+            <EyeClosed
+              onClick={() => setShowPass(false)}
+              className="absolute right-3 top-2.5 text-gray-400 cursor-pointer"
+              size={18}
+            />
+          ) : (
+            <Eye
+              onClick={() => setShowPass(true)}
+              className="absolute right-3 top-2.5 text-gray-400 cursor-pointer"
+              size={18}
+            />
+          )}
+        </div>
+
+        {!login && (
+          <div className="relative mb-4">
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={cnfPassword}
+              onChange={(e) => setCnfPassword(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-400"
+            />
           </div>
-          :
-          <div className='bg-white shadow-2xl h-fit pb-10 md:w-120 w-90 ml-[7%] md:ml-140 mt-30 rounded-2xl'>
-            <p className='text-3xl font-extrabold md:px-15 pt-5 text-center'>Join the Culinary Journey</p>
-            <p className='text-gray-500 px-15 mt-3 text-[15px] text-center'>Unlock a world of Flavor an personalized meal plans</p>
-            <div className='relative md:left-20 left-10'>
-              <div className=' my-5 flex items-center'>
-                <input type='text' placeholder='Enter UserName' value={username} onChange={(e) => setUsername(e.target.value)} className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 py-1.75 pl-3 pr-10 rounded' />
-                <User color='gray' size={20} className='absolute md:right-42 right-25' />
-              </div>
-              <div className='flex items-center'>
-                <input type='email' placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)} className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 py-1.75 px-3 rounded' required /><br />
-                <Mail color='gray' size={20} className='absolute md:right-42 right-25' />
-              </div>
-              {errMsg.length > 0 && <p className='text-red-500 relative'>{errMsg}</p>}
-              <div className='flex items-center'>
-                <input type={showPass ? 'text' : 'password'} placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 my-5 py-1.75 px-3 rounded' required /><br />
-                <Eye color='gray' size={20} className='absolute md:right-42 right-25' onClick={() => setShowPass(!showPass)} />
-              </div>
-              {passErrMsg.length > 0 && <p className='text-red-500 bottom-5 relative'>{passErrMsg}</p>}
-              <div className='flex items-center'>
-                <input type={showPass ? 'text' : 'password'} placeholder='Confirm Password' value={cnfPassword} onChange={(e) => setCnfPassword(e.target.value)} className='border border-gray-500 focus:outline-none focus:border-blue-500 md:w-80 w-70 mb-5 rounded py-1.75 px-3' required /><br />
-                <EyeClosed color='gray' size={20} className='absolute md:right-42 right-25' />
-              </div>
-              {passErrMsg.length > 0 && <p className='text-red-500 bottom-5 relative'>{passErrMsg}</p>}
-              <button style={{ backgroundColor: '#93C5FD' }} onClick={() => handleSignUp()} className='mb-5 px-28 md:px-33 rounded-2xl py-2 cursor-pointer hover:shadow-xl transition-all duration-500 hover:scale-105'>Sign Up</button>
-              <p className='md:ml-10 ml-5'>Already Have An Account? <button className='cursor-pointer' onClick={() => setLogin(true)}>Log In</button></p>
-            </div>
-          </div>
-      }
+        )}
+
+        {passErrMsg && <p className="text-red-500 text-sm mb-3">{passErrMsg}</p>}
+
+        <button
+          onClick={login ? handleLogin : handleSignUp}
+          className="w-full bg-blue-300 py-2 rounded-lg hover:scale-105 transition"
+        >
+          {login ? "Log In" : "Sign Up"}
+        </button>
+
+        <p className="text-center text-sm mt-5">
+          {login ? "Don't have an account?" : "Already have an account?"}
+          <button
+            className="ml-2 text-blue-500 font-medium"
+            onClick={() => setLogin(!login)}
+          >
+            {login ? "Sign Up" : "Log In"}
+          </button>
+        </p>
+
+      </div>
+
     </div>
-  )
+  );
 }
