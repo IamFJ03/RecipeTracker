@@ -189,7 +189,8 @@ export default function Planning() {
           <div className="flex gap-3 items-center">
             <button
               onClick={fetchMeals}
-              className="bg-blue-400 p-3 rounded-lg hover:scale-105 transition"
+              style={{ backgroundColor: "#bfdbfe" }}
+              className=" p-3 rounded-lg hover:scale-105 transition"
             >
               <Search size={20} color="white" />
             </button>
@@ -202,10 +203,9 @@ export default function Planning() {
           </div>
         </div>
 
-        {/* FILTER PANEL */}
         {filterOpen && (
           <div className="bg-white shadow-lg rounded-2xl p-6 mb-10 space-y-6">
-            {/* Diet */}
+
             <div>
               <h3 className="font-semibold mb-3">Diet</h3>
               <div className="flex flex-wrap gap-3">
@@ -213,11 +213,11 @@ export default function Planning() {
                   <button
                     key={d}
                     onClick={() => setSelectedDiet(d)}
-                    className={`px-4 py-2 rounded-full ${
-                      selectedDiet === d
-                        ? "bg-blue-400 text-white"
-                        : "bg-blue-100"
-                    }`}
+                    className={`px-4 py-2 rounded-full`}
+                    style={{
+                      backgroundColor: selectedDiet === d ? "#60a5fa" : "#dbeafe",
+                      color: selectedDiet === d ? "#ffffff" : "#000000"
+                    }}
                   >
                     {d}
                   </button>
@@ -225,7 +225,6 @@ export default function Planning() {
               </div>
             </div>
 
-            {/* Cuisine */}
             <div>
               <h3 className="font-semibold mb-3">Cuisine</h3>
               <div className="flex flex-wrap gap-3">
@@ -233,11 +232,11 @@ export default function Planning() {
                   <button
                     key={c}
                     onClick={() => setSelectedCuisine(c)}
-                    className={`px-4 py-2 rounded-full ${
-                      selectedCuisine === c
-                        ? "bg-blue-400 text-white"
-                        : "bg-blue-100"
-                    }`}
+                    className={`px-4 py-2 rounded-full`}
+                    style={{
+                      backgroundColor: selectedCuisine === c ? "#60a5fa" : "#dbeafe",
+                      color: selectedCuisine === c ? "#ffffff" : "#000000"
+                    }}
                   >
                     {c}
                   </button>
@@ -255,11 +254,15 @@ export default function Planning() {
                     <button
                       key={label}
                       onClick={() => toggleHealthLabel(label)}
-                      className={`px-4 py-2 rounded-full text-sm ${
-                        selectedHealth.includes(label)
-                          ? "bg-blue-400 text-white"
-                          : "bg-blue-100"
-                      }`}
+                      className={`px-4 py-2 rounded-full text-sm`}
+                      style={{
+                        backgroundColor: selectedHealth.includes(label)
+                          ? "#60a5fa"
+                          : "#dbeafe",
+                        color: selectedHealth.includes(label)
+                          ? "#ffffff"
+                          : "#000000"
+                      }}
                     >
                       {label}
                     </button>
@@ -273,6 +276,7 @@ export default function Planning() {
                       setVisibleHealthCount((prev) => prev + 8)
                     }
                     className="text-blue-500 font-medium hover:underline"
+                    style={{ color: "#3b82f6" }}
                   >
                     Show More...
                   </button>
@@ -280,6 +284,7 @@ export default function Planning() {
                   <button
                     onClick={() => setVisibleHealthCount(8)}
                     className="text-blue-500 font-medium hover:underline"
+                    style={{ color: "#3b82f6" }}
                   >
                     Show Less
                   </button>
@@ -290,13 +295,13 @@ export default function Planning() {
             <button
               onClick={applyFilters}
               className="bg-blue-400 text-white px-6 py-2 rounded-lg hover:scale-105 transition"
+              style={{ backgroundColor: "#bfdbfe" }}
             >
               Apply Filters
             </button>
           </div>
         )}
 
-        {/* GRID */}
         {searchMeals.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {searchMeals.map((item) => (
@@ -328,7 +333,6 @@ export default function Planning() {
         )}
       </div>
 
-      {/* MODAL */}
       {modal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white w-full max-w-3xl rounded-2xl p-6 shadow-xl">
@@ -347,6 +351,7 @@ export default function Planning() {
             <button
               onClick={() => handleFavourites(details)}
               className="mt-6 bg-blue-200 px-6 py-2 rounded-lg hover:scale-105 transition"
+              style={{ backgroundColor: "#bfdbfe" }}
             >
               Add to Favourites
             </button>
@@ -354,7 +359,6 @@ export default function Planning() {
         </div>
       )}
 
-      {/* TOAST */}
       {msg && (
         <div className="fixed bottom-6 right-6 bg-white shadow-lg rounded-2xl px-6 py-4 flex items-center gap-4">
           {icon === "Check" ? (

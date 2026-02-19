@@ -176,7 +176,8 @@ export default function Authentication() {
 
         <button
           onClick={login ? handleLogin : handleSignUp}
-          className="w-full bg-blue-300 py-2 rounded-lg hover:scale-105 transition"
+          style={{ backgroundColor: "#bfdbfe" }}
+          className="w-full py-2 rounded-lg hover:scale-105 transition"
         >
           {login ? "Log In" : "Sign Up"}
         </button>

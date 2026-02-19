@@ -141,12 +141,10 @@ export default function Home() {
 
       <Navbar foods={foods} />
       <HeroSection path={location.pathname} />
-
-      {/* TRENDING SECTION */}
-      <div className="py-16 bg-gradient-to-r from-blue-200 to-white">
-        <p className="text-3xl font-bold px-6 md:px-20 mb-8">
-          Trending Recipes
-        </p>
+      <p className="text-3xl font-bold px-6 md:px-20 mb-8 py-10">
+        Trending Recipes
+      </p>
+      <div className="py-16" style={{ background: "linear-gradient(to right, #bfdbfe, white)" }}>
 
         {!isLoading && (
           <div className="w-full overflow-hidden">
@@ -167,7 +165,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* ALL MEALS */}
       <div className="px-6 md:px-20 py-10">
         <p className="text-3xl font-bold mb-10">All Meals</p>
 
@@ -195,14 +192,16 @@ export default function Home() {
                   <div className="flex flex-col gap-3 mt-4">
                     <button
                       onClick={() => handleViewDetails(food)}
-                      className="bg-blue-300 px-6 py-2 rounded hover:scale-105 transition"
+                      style={{ backgroundColor: "#bfdbfe" }}
+                      className=" px-6 py-2 rounded hover:scale-105 transition"
                     >
                       View Details
                     </button>
 
                     <button
                       onClick={() => handleFavourites(food)}
-                      className="bg-blue-300 px-6 py-2 rounded hover:scale-105 transition"
+                      className="px-6 py-2 rounded hover:scale-105 transition"
+                      style={{ backgroundColor: "#bfdbfe" }}
                     >
                       Add to Favourites
                     </button>
@@ -223,7 +222,7 @@ export default function Home() {
         )}
       </div>
 
-      
+
       {modal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white w-[95%] md:w-[70%] max-h-[90vh] overflow-y-auto p-6 rounded-2xl">
