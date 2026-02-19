@@ -14,18 +14,22 @@ export default function Home() {
   const APP_KEY = import.meta.env.VITE_EDAMAM_APP_KEY;
 
   const [foods, setFoods] = useState([]);
-  const [trendFoods, setTrendFoods] = useState([]);
-  const [visibleMeals, setVisibleMeals] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currIdx, setCurrIdx] = useState(0);
-  const [modal, setModal] = useState(false);
-  const [details, setDetails] = useState({});
-  const [infoMsg, setInfoMsg] = useState("");
-  const [msg, setMsg] = useState(false);
-  const [icon, setIcon] = useState("");
-
-  const { setFavourites, setAllMeals } = useCart();
-  const { isLoggedIn } = useAuth();
+   const [trendFoods, setTrendFoods] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+     const [currIdx, setCurrIdx] = useState(0); 
+     const [visibleMeals, setVisibleMeals] = useState([]); 
+     const [modal, setModal] = useState(false); 
+     const [details, setDetails] = useState({}); 
+     const { favourites, setFavourites, setAllMeals, allMeals } = useCart(); 
+     const {isLoggedIn} = useAuth(); 
+     const [infoMsg, setInfoMsg] = useState(""); 
+     const [msg, setMsg] = useState(false); 
+     const [label, setLabel] = useState(""); 
+     const [image, setImage] = useState(""); 
+     const [title, setTitle] = useState(""); 
+     const [ingredients, setIngredients] = useState([]); 
+     const fetchRef = useRef(false); 
+     const [icon, setIcon] = useState("");
   const location = useLocation();
 
 useEffect(() => {
