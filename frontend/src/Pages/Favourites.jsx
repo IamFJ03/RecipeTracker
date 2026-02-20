@@ -142,6 +142,7 @@ export default function Favourites() {
                     <button
                       onClick={() => handleModal(item)}
                       className="bg-blue-300 px-4 py-1 rounded hover:scale-105 transition"
+                      style={{backgroundColor: "#93C5FD"}}
                     >
                       View Recipe
                     </button>
