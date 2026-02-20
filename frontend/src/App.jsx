@@ -6,10 +6,12 @@ import Favourites from './Pages/Favourites';
 import Planning from './Pages/Planning';
 import Recipe from './Pages/Recipe';
 import Payment from './Pages/Payment';
+import {Toaster} from 'react-hot-toast';
 
 export default function App() {
   return (
-    
+    <>
+    <Toaster position='top-right'/>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/Auth' element={<Authentication />} />
@@ -18,6 +20,6 @@ export default function App() {
         <Route path='/recipe' element={<Recipe />} />
         <Route path='/payment' element={<Payment />} />
       </Routes>
-    
+    </>
   )
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { User, Mail, Eye, EyeClosed } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
-
+import toast from 'react-hot-toast';
 export default function Authentication() {
 
   const [login, setLogin] = useState(false);
@@ -25,25 +25,32 @@ export default function Authentication() {
 
   const handleSignUp = async () => {
 
-    if (!username || !email || password.length < 8) {
-      setErrMsg("All fields required. Password must be at least 8 characters.");
+    if (!username) {
+      toast.error("Username field can't be empty")
       return;
     }
-
+    if (!email) {
+      toast.error("email Field can't be empty");
+      return;
+    }
+    if (!password) {
+      toast.error("password Field can't be empty");
+      return;
+    }
     if (!validateEmail(email)) {
-      setErrMsg("Invalid email address");
+      toast.error("Invalid email address");
       return;
     }
 
     if (password !== cnfPassword) {
-      setPassErrMsg("Passwords must match!");
+      toast.error("Passwords must match!");
       return;
     }
 
     try {
       const response = await axios.post(
         "https://recipetracker-fg4e.onrender.com/api/authentication/signup",
-        { username, email, password }
+        { username, email, password, cnfPassword }
       );
 
       if (response.data.message === "User Created Succesfully") {
@@ -61,13 +68,20 @@ export default function Authentication() {
 
   const handleLogin = async () => {
 
-    if (!username || !email || password.length < 8) {
-      setErrMsg("All fields required. Password must be at least 8 characters.");
+    if (!username) {
+      toast.error("Username field can't be empty")
       return;
     }
-
+    if (!email) {
+      toast.error("email Field can't be empty");
+      return;
+    }
+    if (!password) {
+      toast.error("password Field can't be empty");
+      return;
+    }
     if (!validateEmail(email)) {
-      setErrMsg("Invalid email address");
+      toast.error("Invalid email address");
       return;
     }
 
