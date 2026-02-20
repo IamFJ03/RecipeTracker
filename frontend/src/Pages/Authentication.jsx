@@ -33,14 +33,15 @@ export default function Authentication() {
       toast.error("email Field can't be empty");
       return;
     }
-    if (!password) {
-      toast.error("password Field can't be empty");
-      return;
-    }
     if (!validateEmail(email)) {
       toast.error("Invalid email address");
       return;
     }
+    if (!password) {
+      toast.error("password Field can't be empty");
+      return;
+    }
+    
 
     if (password !== cnfPassword) {
       toast.error("Passwords must match!");
@@ -76,14 +77,15 @@ export default function Authentication() {
       toast.error("email Field can't be empty");
       return;
     }
-    if (!password) {
-      toast.error("password Field can't be empty");
-      return;
-    }
     if (!validateEmail(email)) {
       toast.error("Invalid email address");
       return;
     }
+    if (!password) {
+      toast.error("password Field can't be empty");
+      return;
+    }
+    
 
     try {
       const res = await axios.post(
