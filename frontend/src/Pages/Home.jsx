@@ -362,11 +362,7 @@ export default function Home() {
 
       {/* TOAST MESSAGE */}
       {msg && (
-        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 
-                  w-[90%] max-w-md 
-                  md:left-auto md:right-10 md:translate-x-0
-                  bg-white h-20 rounded-2xl shadow 
-                  flex items-center transition-all duration-300 px-4">
+        <div className="fixed bottom-6 right-6 bg-white shadow-lg rounded-2xl px-6 py-4 flex items-center gap-4">
 
           {icon === "Check" ? (
             <CheckCircle size={30} className="mr-4 text-green-500" />
