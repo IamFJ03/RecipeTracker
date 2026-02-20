@@ -56,7 +56,7 @@ export default function Home() {
 
     const fetchRecipes = async () => {
       try {
-        const url = `https://api.edamam.com/api/recipes/v2?type=public&q=${searchTerm}&app_id=${APP_ID}&app_key=${APP_KEY}`;
+        const url = `https://api.edamam.com/api/recipes/v2?type=public&q=recipe&app_id=${APP_ID}&app_key=${APP_KEY}`;
 
         const response = await fetch(url);
 
