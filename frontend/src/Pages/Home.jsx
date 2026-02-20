@@ -1,7 +1,11 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../Components/Navbar";
+import Food1 from '../assets/Food1.jpg';
+import { FaUserGear } from "react-icons/fa6";
+import { FaBowlFood } from "react-icons/fa6";
+import { FaPlateWheat } from "react-icons/fa6";
 import HeroSection from "../Components/HeroSection";
-import { X, CheckCircle, AlertCircle } from "lucide-react";
+import { X, CheckCircle, BookmarkPlus, AlertCircle } from "lucide-react";
 import { useCart } from "../Context/CartContext";
 import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
@@ -14,164 +18,164 @@ export default function Home() {
   const APP_KEY = import.meta.env.VITE_EDAMAM_APP_KEY;
 
   const [foods, setFoods] = useState([]);
-   const [trendFoods, setTrendFoods] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-     const [currIdx, setCurrIdx] = useState(0); 
-     const [visibleMeals, setVisibleMeals] = useState([]); 
-     const [modal, setModal] = useState(false); 
-     const [details, setDetails] = useState({}); 
-     const { favourites, setFavourites, setAllMeals, allMeals } = useCart(); 
-     const {isLoggedIn} = useAuth(); 
-     const [infoMsg, setInfoMsg] = useState(""); 
-     const [msg, setMsg] = useState(false); 
-     const [label, setLabel] = useState(""); 
-     const [image, setImage] = useState(""); 
-     const [title, setTitle] = useState(""); 
-     const [ingredients, setIngredients] = useState([]); 
-     const fetchRef = useRef(false); 
-     const [icon, setIcon] = useState("");
+  const [trendFoods, setTrendFoods] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currIdx, setCurrIdx] = useState(0);
+  const [visibleMeals, setVisibleMeals] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [details, setDetails] = useState({});
+  const { favourites, setFavourites, setAllMeals, allMeals } = useCart();
+  const { isLoggedIn } = useAuth();
+  const [infoMsg, setInfoMsg] = useState("");
+  const [msg, setMsg] = useState(false);
+  const [label, setLabel] = useState("");
+  const [image, setImage] = useState("");
+  const [title, setTitle] = useState("");
+  const [ingredients, setIngredients] = useState([]);
+  const fetchRef = useRef(false);
+  const [icon, setIcon] = useState("");
   const location = useLocation();
 
-useEffect(() => {
-  const cached = localStorage.getItem("allMeals");
+  useEffect(() => {
+    const cached = localStorage.getItem("allMeals");
 
-  if (cached) {
-    const parsedMeals = JSON.parse(cached);
+    if (cached) {
+      const parsedMeals = JSON.parse(cached);
 
-    setAllMeals(parsedMeals);
+      setAllMeals(parsedMeals);
 
-    const topFiveFoods = parsedMeals.slice(0, 8);
-    const allFoods = parsedMeals.slice(8, 20);
-
-    setFoods(allFoods);
-    setTrendFoods(topFiveFoods);
-    setVisibleMeals(allFoods.slice(0, MEALS_BATCH_SIZE));
-    setIsLoading(false);
-    return;
-  }
-
-  const fetchRecipes = async () => {
-    try {
-      const url = `https://api.edamam.com/api/recipes/v2?type=public&q=${searchTerm}&app_id=${APP_ID}&app_key=${APP_KEY}`;
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const fetchedRecipes = data.hits;
-
-      setAllMeals(fetchedRecipes);
-      localStorage.setItem("allMeals", JSON.stringify(fetchedRecipes));
-
-      const topFiveFoods = fetchedRecipes.slice(0, 8);
-      const allFoods = fetchedRecipes.slice(8, 20);
+      const topFiveFoods = parsedMeals.slice(0, 8);
+      const allFoods = parsedMeals.slice(8, 20);
 
       setFoods(allFoods);
       setTrendFoods(topFiveFoods);
       setVisibleMeals(allFoods.slice(0, MEALS_BATCH_SIZE));
       setIsLoading(false);
-
-    } catch (error) {
-      console.error("API Call Failed:", error);
+      return;
     }
+
+    const fetchRecipes = async () => {
+      try {
+        const url = `https://api.edamam.com/api/recipes/v2?type=public&q=${searchTerm}&app_id=${APP_ID}&app_key=${APP_KEY}`;
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const fetchedRecipes = data.hits;
+
+        setAllMeals(fetchedRecipes);
+        localStorage.setItem("allMeals", JSON.stringify(fetchedRecipes));
+
+        const topFiveFoods = fetchedRecipes.slice(0, 8);
+        const allFoods = fetchedRecipes.slice(8, 20);
+
+        setFoods(allFoods);
+        setTrendFoods(topFiveFoods);
+        setVisibleMeals(allFoods.slice(0, MEALS_BATCH_SIZE));
+        setIsLoading(false);
+
+      } catch (error) {
+        console.error("API Call Failed:", error);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
+
+  useEffect(() => {
+    if (trendFoods.length > 0) {
+      const interval = setInterval(() => {
+        setCurrIdx((prev) => (prev + 1) % 3);
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [trendFoods]);
+
+
+  // LOAD MORE
+  const hasMoreMeals = visibleMeals.length < foods.length;
+
+  const handleLoadMore = () => {
+    const nextBatchStart = visibleMeals.length;
+    const nextBatchEnd = nextBatchStart + MEALS_BATCH_SIZE;
+    const nextBatch = foods.slice(nextBatchStart, nextBatchEnd);
+
+    setVisibleMeals((prev) => [...prev, ...nextBatch]);
   };
 
-  fetchRecipes();
-}, []);
+
+  // VIEW DETAILS
+  const handleViewDetails = (item) => {
+    setDetails(item);
+    setModal(true);
+    console.log(item);
+  };
 
 
-useEffect(() => {
-  if (trendFoods.length > 0) {
-    const interval = setInterval(() => {
-      setCurrIdx((prev) => (prev + 1) % 3);
-    }, 3000);
+  // ADD TO FAVOURITES
+  const handleFavourites = async (item) => {
+    if (!isLoggedIn) {
+      setMsg(true);
+      setInfoMsg("Login Required");
+      setIcon("Alert");
 
-    return () => clearInterval(interval);
-  }
-}, [trendFoods]);
+      setTimeout(() => {
+        setMsg(false);
+      }, 5000);
 
+      return;
+    }
 
-// LOAD MORE
-const hasMoreMeals = visibleMeals.length < foods.length;
+    setFavourites((prev) => [...prev, item]);
+    console.log("Meal Added to Cart", item);
 
-const handleLoadMore = () => {
-  const nextBatchStart = visibleMeals.length;
-  const nextBatchEnd = nextBatchStart + MEALS_BATCH_SIZE;
-  const nextBatch = foods.slice(nextBatchStart, nextBatchEnd);
+    const recipeTitle = item.recipe.text;
+    const recipeImage = item.recipe.image;
+    const recipeLabel = item.recipe.label;
+    const recipeIngredients = item.recipe.ingredients;
 
-  setVisibleMeals((prev) => [...prev, ...nextBatch]);
-};
+    setTitle(recipeTitle);
+    setImage(recipeImage);
+    setLabel(recipeLabel);
+    setIngredients(recipeIngredients);
 
+    const res = await axios.post(
+      "https://recipetracker-fg4e.onrender.com/api/cart/addtocart",
+      {
+        title: recipeTitle,
+        image: recipeImage,
+        label: recipeLabel,
+        ingredients: recipeIngredients,
+      },
+      { withCredentials: true }
+    );
 
-// VIEW DETAILS
-const handleViewDetails = (item) => {
-  setDetails(item);
-  setModal(true);
-  console.log(item);
-};
+    if (res.data.message === "Meal already present") {
+      console.log("Meal Already Present");
+      setInfoMsg("Meal Already in Favourites");
+      setIcon("Alert");
+    } else if (res.data.message === "Meal Added") {
+      console.log("Meal Added Successfully", res.data.newRecipe);
+      setInfoMsg("Meal Added to favourites");
+      setIcon("Check");
+    }
 
-
-// ADD TO FAVOURITES
-const handleFavourites = async (item) => {
-  if (!isLoggedIn) {
     setMsg(true);
-    setInfoMsg("Login Required");
-    setIcon("Alert");
-
-    setTimeout(() => {
-      setMsg(false);
-    }, 5000);
-
-    return;
-  }
-
-  setFavourites((prev) => [...prev, item]);
-  console.log("Meal Added to Cart", item);
-
-  const recipeTitle = item.recipe.text;
-  const recipeImage = item.recipe.image;
-  const recipeLabel = item.recipe.label;
-  const recipeIngredients = item.recipe.ingredients;
-
-  setTitle(recipeTitle);
-  setImage(recipeImage);
-  setLabel(recipeLabel);
-  setIngredients(recipeIngredients);
-
-  const res = await axios.post(
-    "https://recipetracker-fg4e.onrender.com/api/cart/addtocart",
-    {
-      title: recipeTitle,
-      image: recipeImage,
-      label: recipeLabel,
-      ingredients: recipeIngredients,
-    },
-    { withCredentials: true }
-  );
-
-  if (res.data.message === "Meal already present") {
-    console.log("Meal Already Present");
-    setInfoMsg("Meal Already in Favourites");
-    setIcon("Alert");
-  } else if (res.data.message === "Meal Added") {
-    console.log("Meal Added Successfully", res.data.newRecipe);
-    setInfoMsg("Meal Added to favourites");
-    setIcon("Check");
-  }
-
-  setMsg(true);
-  setTimeout(() => setMsg(false), 5000);
-};
+    setTimeout(() => setMsg(false), 5000);
+  };
 
 
-// MOUNT / UNMOUNT
-useEffect(() => {
-  console.log("HOME MOUNTED");
-  return () => console.log("HOME UNMOUNTED");
-}, []);
+  // MOUNT / UNMOUNT
+  useEffect(() => {
+    console.log("HOME MOUNTED");
+    return () => console.log("HOME UNMOUNTED");
+  }, []);
 
 
 
@@ -207,7 +211,40 @@ useEffect(() => {
           </div>
         )}
       </div>
+      <div className="py-10 rounded-t-3xl">
+        <p className="text-2xl md:text-3xl font-bold px-6 md:px-20">
+          Categories to Explore
+        </p>
 
+        <div className="flex flex-col md:flex-row gap-10 items-center justify-center md:justify-between px-6 md:px-20 mt-10">
+
+          <img
+            src={Food1}
+            className="h-52 md:h-70 rounded-2xl object-cover"
+            alt="Food"
+          />
+
+          {[
+            { icon: <FaUserGear size={40} color="grey" />, text: "Personalized Meal Plans" },
+            { icon: <BookmarkPlus size={40} color="grey" />, text: "Save Your Favourites" },
+            { icon: <FaPlateWheat size={40} color="grey" />, text: "Cook with Confidence" },
+            { icon: <FaBowlFood size={40} color="grey" />, text: "Cook with..." }
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="w-60 h-60 md:w-50 md:h-50 rounded-2xl bg-white shadow-md 
+                   flex flex-col items-center justify-center text-center px-6
+                   hover:-translate-y-3 hover:shadow-xl transition-all duration-500 cursor-pointer"
+            >
+              {item.icon}
+              <p className="mt-6 text-base md:text-lg font-semibold">
+                {item.text}
+              </p>
+            </div>
+          ))}
+
+        </div>
+      </div>
       {/* ALL MEALS */}
       <div className="px-6 md:px-20 py-10">
         <p className="text-3xl font-bold mb-10">All Meals</p>
@@ -235,7 +272,7 @@ useEffect(() => {
                 <div className="flex flex-col gap-3 mt-4">
                   <button
                     onClick={() => handleViewDetails(food)}
-                    className="px-6 py-2 rounded hover:scale-105 transition"
+                    className="px-6 py-2 rounded hover:scale-105 transition text-white"
                     style={{ backgroundColor: "#bfdbfe" }}
                   >
                     View Details
@@ -243,7 +280,7 @@ useEffect(() => {
 
                   <button
                     onClick={() => handleFavourites(food)}
-                    className="px-6 py-2 rounded hover:scale-105 transition"
+                    className="px-6 py-2 rounded hover:scale-105 transition text-white"
                     style={{ backgroundColor: "#bfdbfe" }}
                   >
                     Add to Favourites
@@ -325,13 +362,21 @@ useEffect(() => {
 
       {/* TOAST MESSAGE */}
       {msg && (
-        <div className="fixed bottom-5 right-1/2 translate-x-1/2 md:right-10 md:translate-x-0 bg-white w-[90%] md:w-96 h-20 rounded-2xl shadow flex items-center transition-all duration-300">
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 
+                  w-[90%] max-w-md 
+                  md:left-auto md:right-10 md:translate-x-0
+                  bg-white h-20 rounded-2xl shadow 
+                  flex items-center transition-all duration-300 px-4">
+
           {icon === "Check" ? (
-            <CheckCircle size={30} className="mx-4 text-green-500" />
+            <CheckCircle size={30} className="mr-4 text-green-500" />
           ) : (
-            <AlertCircle size={30} className="mx-4 text-red-500" />
+            <AlertCircle size={30} className="mr-4 text-red-500" />
           )}
-          <p className="font-mono">{infoMsg}</p>
+
+          <p className="font-mono text-sm md:text-base wrap-break-words">
+            {infoMsg}
+          </p>
         </div>
       )}
     </div>
