@@ -5,7 +5,7 @@ Meal Recipe Finder is a full-stack MERN application that enables users to discov
 
 - Secure User Registration & Login
 - JWT Authentication using HTTP-only Cookies
-- Search Recipes using Edamam API
+- Search Recipes using Edamam API (limited API data 1 request per minute)
 - View Detailed Recipe Information
 - Subscription Plans
 - Three Free Recipe Search Trials
@@ -133,7 +133,7 @@ npm run dev
 ## 🌐 Live Demo
 
 This project requires user authentication to access its features. The source code and screenshots are provided for evaluation.
-
+but in case you want to use - https://flavorfind1.netlify.app/
 
 ## 👨‍💻 Author
 
